@@ -46,3 +46,8 @@ $./couchdb-mapreduce
 2017/01/06 11:01:47 &{0 [{bf00d35e1214161a22e78c2b000033be admin@email.com map[_id:bf00d35e1214161a22e78c2b000033be _rev:1-4e9b44eafd0fbc6bd4a04c0f73868627 email:admin@email.com password:secret123 username:admin] map[]}] 3 0}
 2017/01/06 11:01:47 map[email:admin@email.com password:secret123 username:admin _id:bf00d35e1214161a22e78c2b000033be _rev:1-4e9b44eafd0fbc6bd4a04c0f73868627]
 ```
+
+Open CouchDB dashboard in web browser to view and edit databases and documents. 
+```sh
+http://127.0.0.1:5984/utils
+```
