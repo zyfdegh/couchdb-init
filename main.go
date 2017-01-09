@@ -4,11 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/cesanta/docker_auth/auth_server/authz"
 	"github.com/cesanta/docker_auth/auth_server/utils"
 	"github.com/segmentio/pointer"
 	"github.com/zemirco/couchdb"
+)
+
+const (
+	keyCouchURL  = "COUCHDB_URL"
+	keyCouchUser = "COUCHDB_USER"
+	keyCouchPass = "COUCHDB_PASS"
 )
 
 type DocACLEntry struct {
@@ -43,10 +50,18 @@ func StringInSlice(a string, list []string) bool {
 }
 
 func main() {
+	client := &couchdb.Client{}
+	var err error
 	// create a new client
-	client, err := couchdb.NewClient("http://192.168.10.187:5984/")
-	// create a new client with password
-	// client, err := couchdb.NewAuthClient("admin", "password", "http://192.168.10.187:5984/")
+	user := os.Getenv(keyCouchUser)
+	pass := os.Getenv(keyCouchPass)
+	url := os.Getenv(keyCouchURL)
+	if user != "" && pass != "" {
+		// create a new client with password
+		client, err = couchdb.NewAuthClient(user, pass, url)
+	} else {
+		client, err = couchdb.NewClient(url)
+	}
 	check(err)
 	// get some information about your CouchDB
 	info, err := client.Info()
