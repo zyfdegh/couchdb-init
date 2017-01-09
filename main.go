@@ -21,7 +21,6 @@ type DocACLEntry struct {
 
 type DocAccount struct {
 	couchdb.Document
-	Email    *string `yaml:"email,omitempty" json:"email,omitempty"`
 	Password *string `yaml:"password,omitempty" json:"password,omitempty"`
 	Username *string `yaml:"username,omitempty" json:"username,omitempty"`
 }
@@ -45,7 +44,9 @@ func StringInSlice(a string, list []string) bool {
 
 func main() {
 	// create a new client
-	client, err := couchdb.NewClient("http://127.0.0.1:5984/")
+	client, err := couchdb.NewClient("http://192.168.10.187:5984/")
+	// create a new client with password
+	// client, err := couchdb.NewAuthClient("admin", "password", "http://192.168.10.187:5984/")
 	check(err)
 	// get some information about your CouchDB
 	info, err := client.Info()
@@ -138,8 +139,8 @@ func main() {
 		},
 		Language: "javascript",
 		Views: map[string]couchdb.DesignDocumentView{
-			"getByEmail": couchdb.DesignDocumentView{
-				Map: `function(doc) { emit(doc.email, doc); }`,
+			"getByUsername": couchdb.DesignDocumentView{
+				Map: `function(doc) { emit(doc.username, doc); }`,
 			},
 		},
 	}
@@ -150,10 +151,9 @@ func main() {
 	log.Println(">>> Adding users")
 	uArr := [][]byte{
 		// admin badmin
-		[]byte(`{"email" : "admin@email.com","password" : "secret123","username":"admin"}`),
+		[]byte(`{"username":"admin","password" : "secret123"}`),
 		// zhang password
-		[]byte(`{"email" : "zhang@email.com","password" : "password","username":"zhang"}`),
-		[]byte(`{"email" : "zhang@email.com","password2" : "password","username":"zhang2"}`),
+		[]byte(`{"username":"zhang","password" : "password"}`),
 	}
 	for _, u := range uArr {
 		accoutDoc := &DocAccount{}
@@ -170,9 +170,9 @@ func main() {
 	db = client.Use(dbName)
 	view = db.View(dbName)
 	queryParams = couchdb.QueryParameters{
-		Key: pointer.String(fmt.Sprintf("%q", "admin@email.com")),
+		Key: pointer.String(fmt.Sprintf("%q", "admin")),
 	}
-	res, err = view.Get("getByEmail", queryParams)
+	res, err = view.Get("getByUsername", queryParams)
 	check(err)
 	if res != nil {
 		log.Println(res)
