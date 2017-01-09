@@ -1,5 +1,5 @@
-# couchdb-mapreduce
-Create Map document(also called design document) in CouchDB. Query data by view.
+# couchdb-init
+Create design document in CouchDB, insert user and acl documents. Query data by view.
 
 # Prerequisites
 Docker (1.12+ recommended)
@@ -9,8 +9,8 @@ Go (1.7+ recommended)
 ```sh
 mkdir -p $GOPATH/src/github.com/zyfdegh
 cd $GOPATH/src/github.com/zyfdegh
-git clone https://github.com/zyfdegh/couchdb-mapreduce
-cd couchdb-mapreduce
+git clone https://github.com/zyfdegh/couchdb-init
+cd couchdb-init
 ./build.sh
 ```
 
@@ -24,7 +24,7 @@ This start a couchdb, with port 5984 mapped to host machine.
 Execute program, this will insert design documents, user documents, acl documents into CouchDB,
 after that, it queries one acl and one user from CouchDB.
 ```sh
-$./couchdb-mapreduce
+$./couchdb-init
 2017/01/06 11:01:46 &{Welcome 8bf3c8073da62d44f5affd3ca66a6ca1 {1.6.1 The Apache Software Foundation} 1.6.1}
 2017/01/06 11:01:46 >>> Creating db acl
 2017/01/06 11:01:47 >>> Adding design doc _design/acl
@@ -51,3 +51,10 @@ Open CouchDB dashboard in web browser to view and edit databases and documents.
 ```sh
 http://127.0.0.1:5984/utils
 ```
+
+# Full workspace
+To see how couchdb-init work with docker registry, docker_auth and couchdb to build a registry with authz & authn.
+Redirect to [zyfdegh/dockerauth-workspace](https://github.com/zyfdegh/dockerauth-workspace).
+
+The workspace contains configs, certs and a compose file, you can deploy all containers with a single command.
+
